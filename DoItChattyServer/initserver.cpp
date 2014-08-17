@@ -15,6 +15,8 @@ InitServer::InitServer(QObject *parent) :
 
     mainWindow = static_cast<MainWindow*>(this->parent());
 
+    //connectionMap = new QMap<QTcpSocket*, string>; //no need??
+
 }
 
 /*
@@ -22,6 +24,7 @@ InitServer::InitServer(QObject *parent) :
 */
 void InitServer::startServer(int port)
 {
+    tcpserver = new QTcpServer(this);
     tcpserver->listen(QHostAddress::Any, port);
 
     connect(tcpserver,SIGNAL(newConnection()),this,SLOT(acceptConnection()));
@@ -36,15 +39,47 @@ void InitServer::stopServer(QString message)
 }
 
 /*
- * Called by the newConnection() signal form QTcpServer, will instantiate the connec
+ * Called by the newConnection() signal form QTcpServer, will instantiate the connection
 */
 void InitServer::acceptConnection()
 {
-    tcpsocket = static_cast<QTcpSocket*>(sender());
+    QTcpServer *listened = static_cast<QTcpServer*>(sender());
+    QTcpSocket *client = listened->nextPendingConnection();
 
-    connect(tcpsocket,SIGNAL(readyRead()),this,SLOT(readIncoming()));
-    connect(tcpsocket,SIGNAL(disconnected()),this,SLOT(disconnected()));
-    connect(tcpsocket,SIGNAL(aboutToClose()),this,SLOT(aboutToDisconnect()));
+    connect(client,SIGNAL(readyRead()),this,SLOT(readIncoming()));
+
+    client->write("Connected");
+
+    connect(client,SIGNAL(disconnected()),this,SLOT(disconnected()));
+    connect(client,SIGNAL(aboutToClose()),this,SLOT(aboutToDisconnect()));
+
+}
+
+/*
+ * Adds a socket(new client) to the QMap
+*/
+void InitServer::addConnection(QTcpSocket *client)
+{
+    connectionMap.insert(client, "first");
+
+    updateUserList();
+}
+
+/*
+ * Updates the user list and number of
+*/
+void InitServer::updateUserList()
+{
+
+}
+
+/*
+ * Removes a socket(new client) to the QMap
+*/
+void InitServer::removeConnection(QTcpSocket *client)
+{
+    connectionMap.remove(client);
+    updateUserList();
 }
 
 /*
@@ -54,6 +89,15 @@ void InitServer::readIncoming()
 {
     QTcpSocket *client = static_cast<QTcpSocket*>(sender());
     QByteArray readContent = client->readAll();
+    qDebug() << readContent;
+
+    QString stringContent = QString(readContent).split();
+
+    if (commandList.contains(readContent))
+    {
+        qDebug() << "THERE IS A COMMAND, GUYS!!";
+
+    }
 
 }
 
@@ -70,7 +114,8 @@ void InitServer::aboutToDisconnect()
 */
 void InitServer::disconnected()
 {
-
+    QTcpSocket *client = static_cast<QTcpSocket*>(sender());
+    removeConnection(client);
 }
 
 /*

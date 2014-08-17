@@ -46,19 +46,16 @@ int main(int argc, char *argv[])
         //int i = (int)(argv[1] - '0');
 
         QApplication a(argc, argv);
-
         MainWindow w;
-
         w.show();
+
 
         cout << w.startServer(port);
 
         return a.exec();
     }
     QApplication a(argc, argv);
-
     MainWindow w;
-
     w.show();
 
     return a.exec();

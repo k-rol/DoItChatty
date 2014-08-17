@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "initserver.h"
+#include <iostream>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -8,6 +9,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     server = new InitServer(this);
+
 }
 
 MainWindow::~MainWindow()
@@ -17,7 +19,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_startButton_clicked()
 {
-
+    startServer();
 }
 
 void MainWindow::on_shutdownButton_clicked()
@@ -27,6 +29,7 @@ void MainWindow::on_shutdownButton_clicked()
 
 void MainWindow::startServer()
 {
+
     ui->statusBar->showMessage("Connecting ...");
 
     server->startServer(ui->portSpinBox->value());
@@ -35,9 +38,9 @@ void MainWindow::startServer()
 
 string MainWindow::startServer(quint16 port)
 {
-    //ui->statusBar->showMessage("Connecting ...");
+    ui->statusBar->showMessage("Connecting ...");
 
-    //server->startServer(port);
+    server->startServer(port);
 
     QString portQStr = QString::number(port);
 

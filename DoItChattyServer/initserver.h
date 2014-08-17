@@ -32,10 +32,14 @@ private slots:
 
 
 private:
+    void addConnection(QTcpSocket *client);
+    void removeConnection(QTcpSocket *client);
+    void updateUserList();
     QTcpServer *tcpserver;
     QTcpSocket *tcpsocket;
     MainWindow *mainWindow;
     QMap<QTcpSocket*, string> connectionMap;
+    QList<QString> commandList;
 
 };
 
