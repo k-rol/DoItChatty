@@ -22,3 +22,4 @@ HEADERS  += mainwindow.h \
     client.h
 
 FORMS    += mainwindow.ui
+CONFIG += console

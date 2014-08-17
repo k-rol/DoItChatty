@@ -35,11 +35,12 @@ void MainWindow::startServer()
 
 string MainWindow::startServer(quint16 port)
 {
-    ui->statusBar->showMessage("Connecting ...");
+    //ui->statusBar->showMessage("Connecting ...");
 
-    server->startServer(port);
+    //server->startServer(port);
 
-    string portStr = port.toString();
-    return "Server has been started on port ";
+    QString portQStr = QString::number(port);
+
+    return "Server has been started on port " + portQStr.toStdString();
 }
 
