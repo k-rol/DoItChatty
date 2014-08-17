@@ -6,7 +6,7 @@ using namespace std;
 
 string help()
 {
-    return ;
+    return "v";
 }
 
 int main(int argc, char *argv[])
@@ -15,7 +15,7 @@ int main(int argc, char *argv[])
     MainWindow w;
 
     quint16 port = 0;
-    bool startListening = false;
+
     bool ok = false;
 
     if (argc > 0)
@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
     }
 
     w.show();
-    cout << w.startServer(port, startListening);
+    cout << w.startServer(port);
 
     return a.exec();
 }

@@ -4,6 +4,8 @@
 #include <QMainWindow>
 #include <initserver.h>
 
+using namespace std;
+
 namespace Ui {
 class MainWindow;
 }
@@ -14,7 +16,8 @@ class MainWindow : public QMainWindow
 
 public:
     explicit MainWindow(QWidget *parent = 0);
-    string startServer(quint16 port, bool toWait);
+    string startServer(quint16 port);
+    void startServer();
     ~MainWindow();
 
 private slots:

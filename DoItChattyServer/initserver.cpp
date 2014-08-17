@@ -1,5 +1,9 @@
 #include "initserver.h"
-#include <qdebug.h>
+#include <iostream>
+#include <QtNetwork>
+#include <QDebug>
+#include <ui_mainwindow.h>
+#include <mainwindow.h>
 
 /*
  * Constructor that only set the uiMainWindow pointer
@@ -9,7 +13,8 @@ InitServer::InitServer(QObject *parent) :
 {
     qDebug() << "InitServer Instance Started.";
 
-    uiMainWindow = static_cast<Ui_MainWindow*>(this->parent());
+    mainWindow = static_cast<MainWindow*>(this->parent());
+
 }
 
 /*
@@ -35,11 +40,11 @@ void InitServer::stopServer(QString message)
 */
 void InitServer::acceptConnection()
 {
-    tcpsocket = static_cast<InitServer*>(sender()->nextPendingConnection());
+    tcpsocket = static_cast<QTcpSocket*>(sender());
 
     connect(tcpsocket,SIGNAL(readyRead()),this,SLOT(readIncoming()));
-    connect(tcpsocket,SIGNAL(disconnected()),this,SLOT(disconnected());
-    connect(tcpsocket,SIGNAL(aboutToClose()),this,SLOT(aboutToDisconnect());
+    connect(tcpsocket,SIGNAL(disconnected()),this,SLOT(disconnected()));
+    connect(tcpsocket,SIGNAL(aboutToClose()),this,SLOT(aboutToDisconnect()));
 }
 
 /*
@@ -47,6 +52,8 @@ void InitServer::acceptConnection()
 */
 void InitServer::readIncoming()
 {
+    QTcpSocket *client = static_cast<QTcpSocket*>(sender());
+    QByteArray readContent = client->readAll();
 
 }
 

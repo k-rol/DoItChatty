@@ -25,8 +25,21 @@ void MainWindow::on_shutdownButton_clicked()
     server->stopServer("The Server will Shutdown for x Minutes. Thank you.");
 }
 
-void MainWindow::startServer(quint16 port, bool toWait)
+void MainWindow::startServer()
 {
     ui->statusBar->showMessage("Connecting ...");
+
     server->startServer(ui->portSpinBox->value());
+
 }
+
+string MainWindow::startServer(quint16 port)
+{
+    ui->statusBar->showMessage("Connecting ...");
+
+    server->startServer(port);
+
+    string portStr = port.toString();
+    return "Server has been started on port ";
+}
+

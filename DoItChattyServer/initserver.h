@@ -2,9 +2,13 @@
 #define INITSERVER_H
 
 #include <QObject>
-#include <QtNetwork/QTcpServer>
-#include <QtNetwork/QTcpSocket>
-#include <ui_mainwindow.h>
+#include <QMap>
+
+class QTcpSocket;
+class QTcpServer;
+class MainWindow;
+
+using namespace std;
 
 class InitServer : public QObject
 {
@@ -30,7 +34,8 @@ private slots:
 private:
     QTcpServer *tcpserver;
     QTcpSocket *tcpsocket;
-    Ui_MainWindow *uiMainWindow;
+    MainWindow *mainWindow;
+    QMap<QTcpSocket*, string> connectionMap;
 
 };
 
