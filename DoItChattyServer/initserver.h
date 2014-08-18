@@ -29,12 +29,16 @@ private slots:
     void readIncoming();
     void disconnected();
     void aboutToDisconnect();
+    void textChatMethod(QTcpSocket *client, QString testToSend);
+    void nickChatMethod(QTcpSocket *client, QString nickName);
 
 
 private:
     void addConnection(QTcpSocket *client);
     void removeConnection(QTcpSocket *client);
     void updateUserList();
+    void makeCommandList();
+    QString GetRandomString() const;
     QTcpServer *tcpserver;
     QTcpSocket *tcpsocket;
     MainWindow *mainWindow;

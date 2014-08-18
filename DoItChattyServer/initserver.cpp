@@ -15,8 +15,15 @@ InitServer::InitServer(QObject *parent) :
 
     mainWindow = static_cast<MainWindow*>(this->parent());
 
-    //connectionMap = new QMap<QTcpSocket*, string>; //no need??
+    makeCommandList();
+}
 
+void InitServer::makeCommandList()
+{
+    commandList.append("NICK");
+    commandList.append("TEXT");
+    //commandList.append("ME");
+    //commandList.append("");
 }
 
 /*
@@ -91,13 +98,35 @@ void InitServer::readIncoming()
     QByteArray readContent = client->readAll();
     qDebug() << readContent;
 
-    QString stringContent = QString(readContent).split();
+    QStringList stringContent = QString(readContent).split("|");
 
-    if (commandList.contains(readContent))
+    if (commandList.contains(stringContent.first()))
     {
-        qDebug() << "THERE IS A COMMAND, GUYS!!";
+        string methodToCall = stringContent.first().toLower().toStdString() + "ChatMethod";
+        stringContent.removeFirst();
+        QString afterCommand = stringContent.join("|");
+        client->write(afterCommand.toStdString().c_str());
+        //methodToCall.c_str()
+        QMetaObject::invokeMethod(this,"textChatMethod",Q_ARG(QTcpSocket, client),Q_ARG(QString, stringContent.at(1)));
+
 
     }
+    else
+    {
+
+    }
+
+
+}
+
+void InitServer::textChatMethod(QTcpSocket *client, QString textToSend)
+{
+    //client.write(textToSend.toStdString().c_str());
+
+}
+
+void InitServer::nickChatMethod(QTcpSocket *client, QString nickName)
+{
 
 }
 
@@ -116,6 +145,21 @@ void InitServer::disconnected()
 {
     QTcpSocket *client = static_cast<QTcpSocket*>(sender());
     removeConnection(client);
+}
+
+QString InitServer::GetRandomString() const
+{
+   const QString possibleCharacters("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789");
+   const int randomStringLength = 5; // assuming you want random strings of 12 characters
+
+   QString randomString;
+   for(int i=0; i<randomStringLength; ++i)
+   {
+       int index = qrand() % possibleCharacters.length();
+       QChar nextChar = possibleCharacters.at(index);
+       randomString.append(nextChar);
+   }
+   return randomString;
 }
 
 /*
