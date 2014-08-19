@@ -106,6 +106,8 @@ void InitServer::nickChatMethod(QTcpSocket *client, QString nickName)
     {
         connectionMap.insert(client,nickName);
         qDebug() << "Socket for " + nickName + " has been added.";
+        string welcomeString = "User " + nickName.toStdString() + " has joined the conversation.";
+        client->write(welcomeString.c_str());
 
     }
     else
@@ -119,7 +121,7 @@ void InitServer::nickChatMethod(QTcpSocket *client, QString nickName)
         {
             QString oldNickName = connectionMap.value(client);
             connectionMap.insert(client, nickName);
-            qDebug() << "Client " + oldNickName + " change his username to " + nickName;
+            sendTextToAll("User " + oldNickName + " changed his username to " + nickName);
         }
     }
 
