@@ -29,20 +29,23 @@ private slots:
     void readIncoming();
     void disconnected();
     void aboutToDisconnect();
-    void textChatMethod(QTcpSocket *client, QString testToSend);
-    void nickChatMethod(QTcpSocket *client, QString nickName);
 
 
 private:
-    void addConnection(QTcpSocket *client);
     void removeConnection(QTcpSocket *client);
     void updateUserList();
     void makeCommandList();
+    void sendTextToAll(QString textToSend);
+    //invokeMethod methods
+    Q_INVOKABLE void textChatMethod(QTcpSocket *client, QString testToSend);
+    Q_INVOKABLE void nickChatMethod(QTcpSocket *client, QString nickName);
+    //End invokeMethod methods
+
     QString GetRandomString() const;
     QTcpServer *tcpserver;
     QTcpSocket *tcpsocket;
     MainWindow *mainWindow;
-    QMap<QString, QTcpSocket*> connectionMap;
+    QMap<QTcpSocket*, QString> connectionMap;
     QList<QString> commandList;
 
 };

@@ -63,33 +63,6 @@ void InitServer::acceptConnection()
 }
 
 /*
- * Adds a socket(new client) to the QMap
-*/
-void InitServer::addConnection(QTcpSocket *client)
-{
-    connectionMap.insert("first", client);
-
-    updateUserList();
-}
-
-/*
- * Updates the user list and number of
-*/
-void InitServer::updateUserList()
-{
-
-}
-
-/*
- * Removes a socket(new client) to the QMap
-*/
-void InitServer::removeConnection(QTcpSocket *client)
-{
-    connectionMap.remove(client);
-    updateUserList();
-}
-
-/*
  * Called when there is something received by the socket ready to be read
 */
 void InitServer::readIncoming()
@@ -105,29 +78,84 @@ void InitServer::readIncoming()
         string methodToCall = stringContent.first().toLower().toStdString() + "ChatMethod";
         stringContent.removeFirst();
         QString afterCommand = stringContent.join("|");
-        client->write(afterCommand.toStdString().c_str());
-        //methodToCall.c_str()
-        QMetaObject::invokeMethod(this,"textChatMethod",Q_ARG(QTcpSocket, *client),Q_ARG(QString, stringContent.at(1)));
 
+        QMetaObject::invokeMethod(this,methodToCall.c_str(),Q_ARG(QTcpSocket*, client),Q_ARG(QString, afterCommand));
+    }
+
+
+
+}
+
+/*
+ * Call by invokeMethod when TEXT command is sent, to send normal chat text
+*/
+void InitServer::textChatMethod(QTcpSocket *client, QString textToSend)
+{
+    QString nickName = "<" + connectionMap.value(client) + "> ";
+    QString completeSentence = nickName + textToSend;
+
+    sendTextToAll(completeSentence);
+}
+
+/*
+ * Call by invokeMethod when NICK command is sent, to map the socket under its nickname
+*/
+void InitServer::nickChatMethod(QTcpSocket *client, QString nickName)
+{
+    if (!connectionMap.contains(client))
+    {
+        connectionMap.insert(client,nickName);
+        qDebug() << "Socket for " + nickName + " has been added.";
 
     }
     else
     {
-
+        if (connectionMap.key(nickName) != NULL) //to change to search all values
+        {
+            client->write("Username already taken.");
+            client->close();
+        }
+        else
+        {
+            QString oldNickName = connectionMap.value(client);
+            connectionMap.insert(client, nickName);
+            qDebug() << "Client " + oldNickName + " change his username to " + nickName;
+        }
     }
 
+}
+
+void InitServer::sendTextToAll(QString textToSend)
+{
+    foreach (QTcpSocket *key, connectionMap.keys()) {
+        key->write(textToSend.toStdString().c_str());
+    }
 
 }
 
-void InitServer::textChatMethod(QTcpSocket *client, QString textToSend)
+/*
+ * Updates the user list and number of
+*/
+void InitServer::updateUserList()
 {
-    client.write(textToSend.toStdString().c_str());
+    qDebug() << "Users still active:";
+    foreach (QTcpSocket *key, connectionMap.keys()) {
+        qDebug() << connectionMap.value(key);
 
+    }
 }
 
-void InitServer::nickChatMethod(QTcpSocket *client, QString nickName)
+/*
+ * Removes a socket(new client) to the QMap
+*/
+void InitServer::removeConnection(QTcpSocket *client)
 {
-    connectionMap
+    QString nickName = connectionMap.value(client);
+    qDebug() << "User " + nickName + " has disconnected.";
+
+    connectionMap.remove(client);
+    client->deleteLater();
+    updateUserList();
 }
 
 /*
@@ -144,7 +172,9 @@ void InitServer::aboutToDisconnect()
 void InitServer::disconnected()
 {
     QTcpSocket *client = static_cast<QTcpSocket*>(sender());
+
     removeConnection(client);
+
 }
 
 QString InitServer::GetRandomString() const
