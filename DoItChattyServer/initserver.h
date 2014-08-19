@@ -42,7 +42,7 @@ private:
     QTcpServer *tcpserver;
     QTcpSocket *tcpsocket;
     MainWindow *mainWindow;
-    QMap<QTcpSocket*, string> connectionMap;
+    QMap<QString, QTcpSocket*> connectionMap;
     QList<QString> commandList;
 
 };

@@ -67,7 +67,7 @@ void InitServer::acceptConnection()
 */
 void InitServer::addConnection(QTcpSocket *client)
 {
-    connectionMap.insert(client, "first");
+    connectionMap.insert("first", client);
 
     updateUserList();
 }
@@ -107,7 +107,7 @@ void InitServer::readIncoming()
         QString afterCommand = stringContent.join("|");
         client->write(afterCommand.toStdString().c_str());
         //methodToCall.c_str()
-        QMetaObject::invokeMethod(this,"textChatMethod",Q_ARG(QTcpSocket, client),Q_ARG(QString, stringContent.at(1)));
+        QMetaObject::invokeMethod(this,"textChatMethod",Q_ARG(QTcpSocket, *client),Q_ARG(QString, stringContent.at(1)));
 
 
     }
@@ -121,13 +121,13 @@ void InitServer::readIncoming()
 
 void InitServer::textChatMethod(QTcpSocket *client, QString textToSend)
 {
-    //client.write(textToSend.toStdString().c_str());
+    client.write(textToSend.toStdString().c_str());
 
 }
 
 void InitServer::nickChatMethod(QTcpSocket *client, QString nickName)
 {
-
+    connectionMap
 }
 
 /*
