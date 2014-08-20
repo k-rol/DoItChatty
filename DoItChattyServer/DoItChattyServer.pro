@@ -15,11 +15,11 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     initserver.cpp \
-    client.cpp
+    qbimap.cpp
 
 HEADERS  += mainwindow.h \
     initserver.h \
-    client.h
+    qbimap.h
 
 FORMS    += mainwindow.ui
 CONFIG += console

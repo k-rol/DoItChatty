@@ -3,11 +3,14 @@
 
 #include <QObject>
 #include <QMap>
+#include <qbimap.h>
 
 class QTcpSocket;
 class QTcpServer;
 class MainWindow;
+class QBiMap;
 
+//using namespace QBiMap;
 using namespace std;
 
 class InitServer : public QObject
@@ -46,6 +49,7 @@ private:
     QTcpSocket *tcpsocket;
     MainWindow *mainWindow;
     QMap<QTcpSocket*, QString> connectionMap;
+    QBiMap connectionBiMap;
     QList<QString> commandList;
 
 };

@@ -2,14 +2,15 @@
 #include <iostream>
 #include <QtNetwork>
 #include <QDebug>
-#include <ui_mainwindow.h>
 #include <mainwindow.h>
+#include <qbimap.h>
+
 
 /*
  * Constructor that only set the uiMainWindow pointer
 */
 InitServer::InitServer(QObject *parent) :
-    QObject(parent), tcpserver(0), tcpsocket(0)
+    QObject(parent), tcpserver(0), tcpsocket(0), connectionBiMap(this)
 {
     qDebug() << "InitServer Instance Started.";
 
@@ -54,9 +55,6 @@ void InitServer::acceptConnection()
     QTcpSocket *client = listened->nextPendingConnection();
 
     connect(client,SIGNAL(readyRead()),this,SLOT(readIncoming()));
-
-    client->write("Connected");
-
     connect(client,SIGNAL(disconnected()),this,SLOT(disconnected()));
     connect(client,SIGNAL(aboutToClose()),this,SLOT(aboutToDisconnect()));
 
@@ -107,7 +105,7 @@ void InitServer::nickChatMethod(QTcpSocket *client, QString nickName)
         connectionMap.insert(client,nickName);
         qDebug() << "Socket for " + nickName + " has been added.";
         string welcomeString = "User " + nickName.toStdString() + " has joined the conversation.";
-        client->write(welcomeString.c_str());
+       sendTextToAll(welcomeString.c_str());
 
     }
     else
@@ -121,7 +119,7 @@ void InitServer::nickChatMethod(QTcpSocket *client, QString nickName)
         {
             QString oldNickName = connectionMap.value(client);
             connectionMap.insert(client, nickName);
-            sendTextToAll("User " + oldNickName + " changed his username to " + nickName);
+            sendTextToAll("User " + oldNickName + " changed username to " + nickName);
         }
     }
 
@@ -153,8 +151,7 @@ void InitServer::updateUserList()
 void InitServer::removeConnection(QTcpSocket *client)
 {
     QString nickName = connectionMap.value(client);
-    qDebug() << "User " + nickName + " has disconnected.";
-
+    sendTextToAll("User " + nickName + " has disconnected.");
     connectionMap.remove(client);
     client->deleteLater();
     updateUserList();
