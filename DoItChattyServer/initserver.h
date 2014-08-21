@@ -35,6 +35,7 @@ private slots:
 
 
 private:
+    void addConnection(QTcpSocket *client, QString nickName);
     void removeConnection(QTcpSocket *client);
     void updateUserList();
     void makeCommandList();

@@ -99,10 +99,25 @@ QTcpSocket* QBiMap::value(QString nickName)
 /*
  * Returns a QStringList of the list of QString (nickName)
 */
-QStringList QBiMap::listValue(QTcpSocket *)
+QStringList QBiMap::listQString()
 {
-    QStringList ha;
-    return ha;
+    QStringList nicknameList;
+    foreach (QString nickName, mapByUser.keys()) {
+        nicknameList.append(nickName);
+    }
+    return nicknameList;
+}
+
+/*
+ * Returns QList of QTcpSocket of all of them
+*/
+QList<QTcpSocket*> QBiMap::listSocket()
+{
+    QList<QTcpSocket*> clientList;
+    foreach (QTcpSocket* client, mapBySocket.keys()) {
+        clientList.append(client);
+    }
+    return clientList;
 }
 
 /*

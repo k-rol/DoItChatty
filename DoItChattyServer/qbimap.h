@@ -19,8 +19,8 @@ public:
     bool containsValue(QString nickName);
     QString value(QTcpSocket *client);
     QTcpSocket *value(QString nickName);
-    QStringList listValue(typename QTcpSocket*);
-    QStringList listValue(typename QString);
+    QStringList listQString();
+    QList<QTcpSocket *> listSocket();
     int count();
 
 signals:

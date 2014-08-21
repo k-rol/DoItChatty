@@ -93,6 +93,7 @@ void InitServer::textChatMethod(QTcpSocket *client, QString textToSend)
     QString completeSentence = nickName + textToSend;
 
     sendTextToAll(completeSentence);
+
 }
 
 /*
@@ -100,59 +101,97 @@ void InitServer::textChatMethod(QTcpSocket *client, QString textToSend)
 */
 void InitServer::nickChatMethod(QTcpSocket *client, QString nickName)
 {
+
     if (!connectionBiMap.containsValue(client))
     {
-        connectionBiMap.insert(client,nickName);
-        qDebug() << "Socket for " + nickName + " has been added.";
-        string welcomeString = "User " + nickName.toStdString() + " has joined the conversation.";
-       sendTextToAll(welcomeString.c_str());
+        if (!connectionBiMap.containsValue(nickName))
+        {
+            addConnection(client,nickName);
+            qDebug() << "Socket for " + nickName + " has been added.";
+            string welcomeString = "User " + nickName.toStdString() + " has joined the conversation.";
+            sendTextToAll(welcomeString.c_str());
+        }
+        else
+        {
+            client->write("Username already taken.");
+            client->disconnectFromHost();
+        }
 
     }
     else
     {
-        if (connectionBiMap.value(nickName) != NULL) //to change to search all values
+        qDebug() << connectionBiMap.containsValue(nickName);
+        qDebug() << nickName;
+        if (connectionBiMap.containsValue(nickName)) //to change to search all values
         {
             client->write("Username already taken.");
-            client->close();
         }
         else
         {
             QString oldNickName = connectionBiMap.value(client);
-            connectionBiMap.insert(client, nickName);
+            addConnection(client, nickName);
             sendTextToAll("User " + oldNickName + " changed username to " + nickName);
+
         }
     }
 
 }
 
+/*
+ * Sends text to all users
+ * Should be using local variable instead of re-iterating each time
+ * See updateUserList() below
+*/
 void InitServer::sendTextToAll(QString textToSend)
 {
-    foreach (QTcpSocket *key, connectionMap.keys()) {
-        key->write(textToSend.toStdString().c_str());
-    }
+    QList<QTcpSocket*> allclients;
 
+    allclients = connectionBiMap.listSocket();
+
+    foreach (QTcpSocket *client, allclients) {
+        client->write(textToSend.toStdString().c_str());
+    }
 }
 
 /*
- * Updates the user list and number of
+ * Updates the user list and number of usernames
 */
 void InitServer::updateUserList()
 {
-    qDebug() << "Users still active:";
-    foreach (QTcpSocket *key, connectionMap.keys()) {
-        qDebug() << connectionBiMap.value(key);
+    QStringList userList;
+    userList = connectionBiMap.listQString();
 
+    qDebug() << "Users still active:";
+    foreach (QString nickName, userList) {
+        qDebug() << nickName;
     }
+
+    //update local QList<QString> variable
+    //update local QList<QTcpSocket> variable
 }
 
 /*
- * Removes a socket(new client) to the QMap
+ * Adds a socket(new client) to the QMap
+*/
+void InitServer::addConnection(QTcpSocket *client, QString nickName)
+{
+    //bool ok =
+    connectionBiMap.insert(client, nickName);
+    //qDebug() << ok;
+}
+
+/*
+ * Removes a socket to the QMap
 */
 void InitServer::removeConnection(QTcpSocket *client)
 {
     QString nickName = connectionBiMap.value(client);
-    sendTextToAll("User " + nickName + " has disconnected.");
-    connectionBiMap.remove(client);
+    if (nickName != NULL)
+    {
+        sendTextToAll("User " + nickName + " has disconnected.");
+    }
+    bool ok = connectionBiMap.remove(client);
+    qDebug() << ok;
     client->deleteLater();
     updateUserList();
 }
@@ -173,13 +212,12 @@ void InitServer::disconnected()
     QTcpSocket *client = static_cast<QTcpSocket*>(sender());
 
     removeConnection(client);
-
 }
 
 QString InitServer::GetRandomString() const
 {
    const QString possibleCharacters("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789");
-   const int randomStringLength = 5; // assuming you want random strings of 12 characters
+   const int randomStringLength = 5; // assuming you want random strings of 5 characters
 
    QString randomString;
    for(int i=0; i<randomStringLength; ++i)
