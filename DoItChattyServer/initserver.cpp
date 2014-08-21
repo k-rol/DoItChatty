@@ -147,6 +147,7 @@ void InitServer::nickChatMethod(QTcpSocket *client, QString nickName)
         else
         {
             QString oldNickName = connectionBiMap.value(client);
+            connectionBiMap.remove(client);
             addConnection(client, nickName);
             sendTextToAll("User " + oldNickName + " changed username to " + nickName);
 
