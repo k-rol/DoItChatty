@@ -4,6 +4,8 @@
 #include <QMainWindow>
 #include <initserver.h>
 
+class QStandardItemModel;
+
 using namespace std;
 
 namespace Ui {
@@ -18,6 +20,8 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     string startServer(quint16 port);
     void startServer();
+    void addUser(QString nickName);
+    void clearUserList();
     ~MainWindow();
 
 private slots:
@@ -27,6 +31,7 @@ private slots:
 private:
     Ui::MainWindow *ui;
     InitServer *server;
+    QStandardItemModel *model;
 };
 
 #endif // MAINWINDOW_H

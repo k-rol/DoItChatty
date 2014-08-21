@@ -59,23 +59,6 @@
      <string>Shutdown</string>
     </property>
    </widget>
-   <widget class="QCheckBox" name="autoStartCheckBox">
-    <property name="geometry">
-     <rect>
-      <x>290</x>
-      <y>10</y>
-      <width>81</width>
-      <height>51</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Start server 
-automatically</string>
-    </property>
-    <property name="tristate">
-     <bool>false</bool>
-    </property>
-   </widget>
    <widget class="QListView" name="userListView">
     <property name="geometry">
      <rect>

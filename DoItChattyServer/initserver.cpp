@@ -32,10 +32,14 @@ void InitServer::makeCommandList()
 */
 void InitServer::startServer(int port)
 {
-    tcpserver = new QTcpServer(this);
-    tcpserver->listen(QHostAddress::Any, port);
+    if (tcpserver == 0 || !tcpserver->isListening())
+    {
+        tcpserver = new QTcpServer(this);
+        tcpserver->listen(QHostAddress::Any, port);
 
-    connect(tcpserver,SIGNAL(newConnection()),this,SLOT(acceptConnection()));
+        connect(tcpserver,SIGNAL(newConnection()),this,SLOT(acceptConnection()));
+    }
+
 }
 
 /*
@@ -43,7 +47,20 @@ void InitServer::startServer(int port)
 */
 void InitServer::stopServer(QString message)
 {
-    tcpserver->close();
+    if (tcpserver != 0 && tcpserver->isListening())
+    {
+        QList<QTcpSocket*> allclients;
+
+        allclients = connectionBiMap.listSocket();
+
+        foreach (QTcpSocket *client, allclients) {
+            client->write("Server is shutting down.");
+            client->close();
+        }
+        //send to UI ("Stopped Listening");
+        tcpserver->close();
+        tcpserver = 0;
+    }
 }
 
 /*
@@ -106,10 +123,11 @@ void InitServer::nickChatMethod(QTcpSocket *client, QString nickName)
     {
         if (!connectionBiMap.containsValue(nickName))
         {
-            addConnection(client,nickName);
-            qDebug() << "Socket for " + nickName + " has been added.";
             string welcomeString = "User " + nickName.toStdString() + " has joined the conversation.";
             sendTextToAll(welcomeString.c_str());
+            addConnection(client,nickName);
+            qDebug() << "Socket for " + nickName + " has been added.";
+
         }
         else
         {
@@ -154,20 +172,25 @@ void InitServer::sendTextToAll(QString textToSend)
 }
 
 /*
- * Updates the user list and number of usernames
+ * Updates the user list on GUI
 */
 void InitServer::updateUserList()
 {
     QStringList userList;
     userList = connectionBiMap.listQString();
 
+    mainWindow->clearUserList();
+
     qDebug() << "Users still active:";
     foreach (QString nickName, userList) {
-        qDebug() << nickName;
+        //qDebug() << nickName;
+        mainWindow->addUser(nickName);
     }
 
     //update local QList<QString> variable
     //update local QList<QTcpSocket> variable
+
+
 }
 
 /*
@@ -178,6 +201,7 @@ void InitServer::addConnection(QTcpSocket *client, QString nickName)
     //bool ok =
     connectionBiMap.insert(client, nickName);
     //qDebug() << ok;
+    updateUserList();
 }
 
 /*

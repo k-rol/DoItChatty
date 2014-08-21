@@ -2,6 +2,8 @@
 #include "ui_mainwindow.h"
 #include "initserver.h"
 #include <iostream>
+#include <QStandardItem>
+#include <QStandardItemModel>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -10,16 +12,25 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     server = new InitServer(this);
 
-}
-
-MainWindow::~MainWindow()
-{
-    delete ui;
+    model = new QStandardItemModel();
+    ui->userListView->setModel(model);
 }
 
 void MainWindow::on_startButton_clicked()
 {
     startServer();
+}
+
+void MainWindow::addUser(QString nickName)
+{
+    QStandardItem* user = new QStandardItem(nickName);
+    model->appendRow(user);
+
+}
+
+void MainWindow::clearUserList()
+{
+    model->clear();
 }
 
 void MainWindow::on_shutdownButton_clicked()
@@ -47,3 +58,7 @@ string MainWindow::startServer(quint16 port)
     return "Server has been started on port " + portQStr.toStdString();
 }
 
+MainWindow::~MainWindow()
+{
+    delete ui;
+}
