@@ -12,23 +12,24 @@ class QBiMap : public QObject
     Q_OBJECT
 public:
     explicit QBiMap(QObject *parent = 0);
-    void addConnection(QTcpSocket *client, QString nickName);
-    bool delConnection(QTcpSocket *client);
-    bool delConnection(QString nickName);
-    bool containsConnection(QTcpSocket *client);
-    bool containsConnection(QString nickName);
-    QString getConnection(QTcpSocket *client);
-    QTcpSocket *getConnection(QString nickName);
-    QStringList listStringConnections();
-    int countConnection();
+    void insert(QTcpSocket *client, QString nickName);
+    bool remove(QTcpSocket *client);
+    bool remove(QString nickName);
+    bool containsValue(QTcpSocket *client);
+    bool containsValue(QString nickName);
+    QString value(QTcpSocket *client);
+    QTcpSocket *value(QString nickName);
+    QStringList listValue(typename QTcpSocket*);
+    QStringList listValue(typename QString);
+    int count();
 
 signals:
 
 public slots:
 
 private:
-    QMap<QTcpSocket*, QString> connectionMapBySocket;
-    QMap<QString, QTcpSocket*> connectionMapByUser;
+    QMap<QTcpSocket*, QString> mapBySocket;
+    QMap<QString, QTcpSocket*> mapByUser;
 
 
 };

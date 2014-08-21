@@ -89,7 +89,7 @@ void InitServer::readIncoming()
 */
 void InitServer::textChatMethod(QTcpSocket *client, QString textToSend)
 {
-    QString nickName = "<" + connectionMap.value(client) + "> ";
+    QString nickName = "<" + connectionBiMap.value(client) + "> ";
     QString completeSentence = nickName + textToSend;
 
     sendTextToAll(completeSentence);
@@ -100,9 +100,9 @@ void InitServer::textChatMethod(QTcpSocket *client, QString textToSend)
 */
 void InitServer::nickChatMethod(QTcpSocket *client, QString nickName)
 {
-    if (!connectionMap.contains(client))
+    if (!connectionBiMap.containsValue(client))
     {
-        connectionMap.insert(client,nickName);
+        connectionBiMap.insert(client,nickName);
         qDebug() << "Socket for " + nickName + " has been added.";
         string welcomeString = "User " + nickName.toStdString() + " has joined the conversation.";
        sendTextToAll(welcomeString.c_str());
@@ -110,15 +110,15 @@ void InitServer::nickChatMethod(QTcpSocket *client, QString nickName)
     }
     else
     {
-        if (connectionMap.key(nickName) != NULL) //to change to search all values
+        if (connectionBiMap.value(nickName) != NULL) //to change to search all values
         {
             client->write("Username already taken.");
             client->close();
         }
         else
         {
-            QString oldNickName = connectionMap.value(client);
-            connectionMap.insert(client, nickName);
+            QString oldNickName = connectionBiMap.value(client);
+            connectionBiMap.insert(client, nickName);
             sendTextToAll("User " + oldNickName + " changed username to " + nickName);
         }
     }
@@ -140,7 +140,7 @@ void InitServer::updateUserList()
 {
     qDebug() << "Users still active:";
     foreach (QTcpSocket *key, connectionMap.keys()) {
-        qDebug() << connectionMap.value(key);
+        qDebug() << connectionBiMap.value(key);
 
     }
 }
@@ -150,9 +150,9 @@ void InitServer::updateUserList()
 */
 void InitServer::removeConnection(QTcpSocket *client)
 {
-    QString nickName = connectionMap.value(client);
+    QString nickName = connectionBiMap.value(client);
     sendTextToAll("User " + nickName + " has disconnected.");
-    connectionMap.remove(client);
+    connectionBiMap.remove(client);
     client->deleteLater();
     updateUserList();
 }

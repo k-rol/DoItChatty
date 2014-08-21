@@ -10,22 +10,22 @@ QBiMap::QBiMap(QObject *parent) :
 /*
  * Add map to both QMap
 */
-void QBiMap::addConnection(QTcpSocket *client, QString nickName)
+void QBiMap::insert(QTcpSocket *client, QString nickName)
 {
-    connectionMapBySocket.insert(client, nickName);
-    connectionMapByUser.insert(nickName, client);
+    mapBySocket.insert(client, nickName);
+    mapByUser.insert(nickName, client);
 }
 
 /*
  * Del map to both QMap when given the socket only
 */
-bool QBiMap::delConnection(QTcpSocket *client)
+bool QBiMap::remove(QTcpSocket *client)
 {
 
     QString nickName;
-    nickName = connectionMapBySocket.value(client);
-    int s = connectionMapBySocket.remove(client);
-    int n = connectionMapByUser.remove(nickName);
+    nickName = mapBySocket.value(client);
+    int s = mapBySocket.remove(client);
+    int n = mapByUser.remove(nickName);
 
     if (s == 0 || n == 0)
     {
@@ -38,12 +38,12 @@ bool QBiMap::delConnection(QTcpSocket *client)
 /*
  * Del map to both QMap when given the nickName only
 */
-bool QBiMap::delConnection(QString nickName)
+bool QBiMap::remove(QString nickName)
 {
     QTcpSocket *client;
-    client = connectionMapByUser.value(nickName);
-    int s = connectionMapBySocket.remove(client);
-    int n = connectionMapByUser.remove(nickName);
+    client = mapByUser.value(nickName);
+    int s = mapBySocket.remove(client);
+    int n = mapByUser.remove(nickName);
 
 
     if (s == 0 || n == 0)
@@ -57,9 +57,9 @@ bool QBiMap::delConnection(QString nickName)
 /*
  * Returns bool wether the QTcpSocket key already exist
 */
-bool QBiMap::containsConnection(QTcpSocket *client)
+bool QBiMap::containsValue(QTcpSocket *client)
 {
-    if (connectionMapBySocket.contains(client))
+    if (mapBySocket.contains(client))
     {
         return true;
     }
@@ -69,9 +69,9 @@ bool QBiMap::containsConnection(QTcpSocket *client)
 /*
  * Returns bool wether the QString key already exist
 */
-bool QBiMap::containsConnection(QString nickName)
+bool QBiMap::containsValue(QString nickName)
 {
-    if (connectionMapByUser.contains(nickName))
+    if (mapByUser.contains(nickName))
     {
         return true;
     }
@@ -81,25 +81,25 @@ bool QBiMap::containsConnection(QString nickName)
 /*
  * Return QString with the nickName found in client
 */
-QString QBiMap::getConnection(QTcpSocket *client)
+QString QBiMap::value(QTcpSocket *client)
 {
-    QString nickName = connectionMapBySocket.value(client);
+    QString nickName = mapBySocket.value(client);
     return nickName;
 }
 
 /*
  * Return QTcpSocket with the client socket found with the nickName
 */
-QTcpSocket* QBiMap::getConnection(QString nickName)
+QTcpSocket* QBiMap::value(QString nickName)
 {
-    QTcpSocket *client = connectionMapByUser.value(nickName);
+    QTcpSocket *client = mapByUser.value(nickName);
     return client;
 }
 
 /*
  * Returns a QStringList of the list of QString (nickName)
 */
-QStringList QBiMap::listStringConnections()
+QStringList QBiMap::listValue(QTcpSocket *)
 {
     QStringList ha;
     return ha;
@@ -108,9 +108,9 @@ QStringList QBiMap::listStringConnections()
 /*
  *
 */
-int QBiMap::countConnection()
+int QBiMap::count()
 {
-    int count = connectionMapBySocket.count();
+    int count = mapBySocket.count();
 
     return count;
 }
