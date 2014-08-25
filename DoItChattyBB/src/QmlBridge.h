@@ -9,9 +9,11 @@
 #define QMLBRIDGE_H_
 #include <QObject>
 #include <bb/cascades/AbstractPane>
+#include "tcpserver.h"
 
 using namespace bb::cascades;
 
+class TcpServer;
 
 class QmlBridge: public QObject
 {
@@ -22,11 +24,23 @@ public:
     void updateText(QString readContent);
     void systemMessages(QString textToSend);
     void setButtonEnabilities(QString set);
-    AbstractPane *myRoot;
+    Q_INVOKABLE void setUIButtons(QString set);
+    Q_INVOKABLE void on_sendTextButton_clicked(QString textToSend);
+    Q_INVOKABLE void on_disconnectButton_clicked();
+    Q_INVOKABLE void on_connectButton_clicked(QString nickName);
+    Q_INVOKABLE void on_changeNickButton_clicked(QString nickName);
     virtual ~QmlBridge();
 
 private:
+    void setDisconnected();
+    void setConnected();
+    AbstractPane *myRoot;
+    TcpServer *tcpServer;
 
+    /*
+private slots:
+
+    */
 };
 
 #endif /* QMLBRIDGE_H_ */
