@@ -2,6 +2,7 @@
 #define TCPSERVER_H
 
 #include <QObject>
+#include "QmlBridge.h"
 
 using namespace std;
 

@@ -66,11 +66,13 @@ config_pri_assets {
 
 config_pri_source_group1 {
     SOURCES += \
+        $$quote($$BASEDIR/src/QmlBridge.cpp) \
         $$quote($$BASEDIR/src/applicationui.cpp) \
         $$quote($$BASEDIR/src/main.cpp) \
         $$quote($$BASEDIR/src/tcpserver.cpp)
 
     HEADERS += \
+        $$quote($$BASEDIR/src/QmlBridge.h) \
         $$quote($$BASEDIR/src/applicationui.hpp) \
         $$quote($$BASEDIR/src/tcpserver.h)
 }

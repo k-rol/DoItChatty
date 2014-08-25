@@ -2,8 +2,8 @@
 #include <iostream>
 #include <QtNetwork>
 #include <QDebug>
-#include <ui_mainwindow.h>
-#include <mainwindow.h>
+//#include <mainwindow.h>
+#include "QmlBridge.h"
 
 using namespace std;
 
@@ -89,9 +89,10 @@ void TcpServer::startRead()
 
     if (!IsACommand(readContent))
     {
-        MainWindow *instanceMainWindow = static_cast<MainWindow*>(this->parent());
+        QmlBridge *instanceMainWindow = static_cast<QmlBridge*>(this->parent());
 
         instanceMainWindow->updateText(trimText(readContent));
+
     }
 
 }
@@ -112,7 +113,7 @@ void TcpServer::sendNickName()
  */
 void TcpServer::updateUiText(QString textToSend)
 {
-    MainWindow *instanceMainWindow = static_cast<MainWindow*>(this->parent());
+    QmlBridge *instanceMainWindow = static_cast<QmlBridge*>(this->parent());
     instanceMainWindow->systemMessages(textToSend);
 }
 
@@ -159,7 +160,7 @@ bool TcpServer::IsACommand(QByteArray &possibleCommand)
  */
 void TcpServer::setUIButtons(QString set)
 {
-    MainWindow *instanceMainWindow = static_cast<MainWindow*>(this->parent());
+    QmlBridge *instanceMainWindow = static_cast<QmlBridge*>(this->parent());
     instanceMainWindow->setButtonEnabilities(set);
 }
 
