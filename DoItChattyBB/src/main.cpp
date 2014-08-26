@@ -21,6 +21,7 @@
 #include <QLocale>
 #include <QTranslator>
 
+
 #include <Qt/qdeclarativedebug.h>
 
 using namespace bb::cascades;
@@ -28,6 +29,7 @@ using namespace bb::cascades;
 Q_DECL_EXPORT int main(int argc, char **argv)
 {
     Application app(argc, argv);
+
 
     // Create the Application UI object, this is where the main.qml file
     // is loaded and the application scene is set.

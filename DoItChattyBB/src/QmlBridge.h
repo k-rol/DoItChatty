@@ -9,11 +9,15 @@
 #define QMLBRIDGE_H_
 #include <QObject>
 #include <bb/cascades/AbstractPane>
+#include <bb/cascades/controls/textarea.h>
+#include <bb/cascades/controls/textfield.h>
 #include "tcpserver.h"
 
 using namespace bb::cascades;
 
 class TcpServer;
+
+
 
 class QmlBridge: public QObject
 {
@@ -32,9 +36,13 @@ public:
     virtual ~QmlBridge();
 
 private:
+    void checkFocus();
     void setDisconnected();
     void setConnected();
     AbstractPane *myRoot;
+    TextArea *myTextArea;
+    TextField *mySendTextField;
+    TextField *myNickTextField;
     TcpServer *tcpServer;
 
     /*

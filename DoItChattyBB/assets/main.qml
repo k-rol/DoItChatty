@@ -1,8 +1,17 @@
-
-
 import bb.cascades 1.2
+import my.timer 1.0
 
 Page {
+attachedObjects: [
+    QTimer {
+        id: timer
+        interval: 500
+        onTimeout :{
+            scrolldown()
+            timer.stop()
+        }
+    }
+]
       titleBar: TitleBar {
           title: "DoIt Chatty"
         branded: TriBool.True
@@ -17,8 +26,9 @@ Page {
             
             TextField {
                 id: nickTextBox
-                text: "Carol"
+                text: "Petula"
                 preferredWidth: 340.0
+                objectName: "nickTextBox"
 
             }
             Button {
@@ -34,6 +44,7 @@ Page {
                 text: "Connect"
                 onClicked: {
                     QmlBridge.on_connectButton_clicked(nickTextBox.text);
+                    
                 }
                 objectName: "connectButton"
                 preferredWidth: 100
@@ -41,17 +52,24 @@ Page {
 
         }
         Container {
-            TextArea {
-                id: chatTextBox
-                scrollMode: TextAreaScrollMode.Stiff
-                objectName: "chatTextBox"
-                //editable: false
-                text: "No text received..."
-                onTextChanged: {
-                    //create some phone notification
+        
+            ScrollView {
+                id: myScrollView
+                scrollRole: ScrollRole.Main
+                objectName: "myScrollView"
+                TextArea {
+                    id: chatTextBox
+                    scrollMode: TextAreaScrollMode.Stiff
+                    objectName: "chatTextBox"
+                    editable: false
+                    text: "No text received..."
+                    inputMode: TextAreaInputMode.Chat
+                    onTextChanged: {
+                        //chatTextBox.editor.cursorPosition = chatTextBox.editor.cursorPosition.valueOf() + 1000
+                        scrolldown()
+                    }
+                    minHeight: 475.0
                 }
-                preferredHeight: 450.0
-
             }
             Container {
                 layout: StackLayout {
@@ -62,12 +80,32 @@ Page {
                 TextField {
                     id: sendTextBox
                     hintText: "Chat here"
+                    inputMode: TextFieldInputMode.Chat
+                    input.submitKey: SubmitKey.Send
+                    objectName: "sendTextBox"
+                    input {
+                        onSubmitted: {
+                            QmlBridge.on_sendTextButton_clicked(sendTextBox.text)
+                            sendTextBox.text = ""
+                            sendTextBox.requestFocus()
+                        }
+                    }
+                    onFocusedChanged: {
+                        if (sendTextBox.focused)
+                        {
+                            scrolldown()
+                            timer.start()
+                        }
+                    }
+
                 }
                 Button {
                     text: "Send"
                     preferredWidth: 150
                     onClicked: {
                         QmlBridge.on_sendTextButton_clicked(sendTextBox.text)
+                        sendTextBox.text = ""
+                        sendTextBox.requestFocus()
                     }
                     leftMargin: 20.0
                     focusPolicy: FocusPolicy.KeyAndTouch
@@ -77,5 +115,9 @@ Page {
 
         }
         
+    }
+    function scrolldown() 
+    {
+        myScrollView.scrollToPoint(0, 100000, ScrollAnimation.None)   
     }
 }

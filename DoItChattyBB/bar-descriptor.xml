@@ -65,6 +65,8 @@
          May have multiple values for each language. See samples or xsd schema file. Optional. -->
     <description>The DoItChattyBB application</description>
 
+
+	<env var="CASCADES_THEME" value="Bright"/>
     <!-- Copyright information. Optional. -->
     <!-- <copyright></copyright> -->
 

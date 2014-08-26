@@ -9,10 +9,11 @@
 #include <bb/cascades/AbstractPane>
 #include <bb/cascades/controls/button.h>
 #include <bb/cascades/controls/textarea.h>
+#include <bb/cascades/controls/textfield.h>
 
 using namespace bb::cascades;
 
-QmlBridge::QmlBridge(QObject *parent) : QObject(parent), myRoot(0)
+QmlBridge::QmlBridge(QObject *parent) : QObject(parent), myRoot(0), myTextArea(0), mySendTextField(0), myNickTextField(0)
 {
     tcpServer = new TcpServer(this);
     //emit setDisconnected();
@@ -21,7 +22,9 @@ QmlBridge::QmlBridge(QObject *parent) : QObject(parent), myRoot(0)
 void QmlBridge::setQml(AbstractPane *root)
 {
     myRoot = root;
-
+    myTextArea = myRoot->findChild<TextArea*>("chatTextBox");
+    mySendTextField = myRoot->findChild<TextField*>("sendTextBox");
+    myNickTextField = myRoot->findChild<TextField*>("nickTextBox");
 }
 
 void QmlBridge::updateText(QString readContent)
@@ -51,6 +54,28 @@ void QmlBridge::updateText(QString readContent)
         {
             //ui->chatTextbox->append(readContent);
         }
+
+    QString text = myTextArea->text() + "\n" + readContent;
+    myTextArea->setText(text);
+    //checkFocus();
+}
+
+void QmlBridge::checkFocus()
+{
+    if (myTextArea->isFocused())
+    {
+        myTextArea->editor()->setCursorPosition(myTextArea->editor()->cursorPosition() + 1);
+    }
+    else if (myNickTextField->isFocused()) {
+        myTextArea->requestFocus();
+        //myTextArea->editor()->setCursorPosition(myTextArea->editor()->cursorPosition() + 1);
+        myNickTextField->requestFocus();
+    }
+    else {
+        myTextArea->requestFocus();
+        myTextArea->editor()->setCursorPosition(myTextArea->editor()->cursorPosition() + 100000);
+        mySendTextField->requestFocus();
+    }
 }
 
 void QmlBridge::systemMessages(QString textToSend)
