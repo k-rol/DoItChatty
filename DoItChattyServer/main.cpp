@@ -1,7 +1,7 @@
 #include "mainwindow.h"
 #include <QApplication>
 #include <iostream>
-
+//Add CONFIG += console to pro file for console output
 
 using namespace std;
 
@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
         }
         else if (port < thanOne || port > exceed)
         {
-            cout << "\nError: Port range exceeded. Should be [1 - 65535].\n";
+            //cout << "\nError: Port range exceeded. Should be [1 - 65535].\n";
             return 0;
         }
         //port = QString(argv[1]).toInt(&ok);
@@ -50,7 +50,8 @@ int main(int argc, char *argv[])
         w.show();
 
 
-        cout << w.startServer(port);
+        //cout << w.startServer(port);
+        w.startServer(port);
 
         return a.exec();
     }

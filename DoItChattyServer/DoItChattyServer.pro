@@ -22,6 +22,6 @@ HEADERS  += mainwindow.h \
     qbimap.h
 
 FORMS    += mainwindow.ui
-CONFIG += console
+
 
 RESOURCES +=

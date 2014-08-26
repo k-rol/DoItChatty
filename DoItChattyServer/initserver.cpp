@@ -23,7 +23,7 @@ void InitServer::makeCommandList()
 {
     commandList.append("NICK");
     commandList.append("TEXT");
-    //commandList.append("ME");
+    //commandList.append("PING");
     //commandList.append("");
 }
 
