@@ -15,6 +15,7 @@ MainWindow::MainWindow(QWidget *parent) :
     tcpserver = new TcpServer(this);
     setDisconnected();
     setNotListening();
+
 }
 
 MainWindow::~MainWindow()
@@ -52,11 +53,17 @@ void MainWindow::updateText(QString &readContent)
         {
             ui->chatTextbox->append(readContent);
         }
+
+    QApplication::alert(this, 5000);
+
+    ui->chatTextbox->moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
+    ui->chatTextbox->ensureCursorVisible();
 }
 
-void MainWindow::insertEmoticon(QString emoString)
+void MainWindow::setEmoticonMap()
 {
-    //ui->chatTextbox->insertHtml(readContent); <img src='\smile.png'> <img src=\":/smile.png\"> <img src=":/emoticon/smile.png" />
+    QRegExp reg(":\\)");
+    emoticonMap.insert(reg, ":/emoticon/smile.png");
 }
 
 void MainWindow::systemMessages(QString msgSystem)

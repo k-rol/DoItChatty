@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <tcpserver.h>
+#include <QMap>
 
 namespace Ui {
 class MainWindow;
@@ -21,11 +22,12 @@ public:
     ~MainWindow();
 
 private:
-    void insertEmoticon(QString emoString);
+    void setEmoticonMap();
     void setDisconnected();
     void setConnected();
     void setListening();
     void setNotListening();
+    QMap<QRegExp, QString> emoticonMap;
     Ui::MainWindow *ui;
     TcpServer *tcpserver;
 
