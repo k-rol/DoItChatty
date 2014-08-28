@@ -15,11 +15,13 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     initserver.cpp \
-    qbimap.cpp
+    qbimap.cpp \
+    ping.cpp
 
 HEADERS  += mainwindow.h \
     initserver.h \
-    qbimap.h
+    qbimap.h \
+    ping.h
 
 FORMS    += mainwindow.ui
 

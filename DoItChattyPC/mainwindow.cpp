@@ -63,7 +63,7 @@ void MainWindow::updateText(QString &readContent)
 void MainWindow::setEmoticonMap()
 {
     QRegExp reg(":\\)");
-    emoticonMap.insert(reg, ":/emoticon/smile.png");
+    //emoticonMap.insert(reg, ":/emoticon/smile.png");
 }
 
 void MainWindow::systemMessages(QString msgSystem)
