@@ -1,5 +1,7 @@
 import bb.cascades 1.2
 import my.timer 1.0
+import bb.platform 1.2
+import bb.device 1.2
 
 Page {
     attachedObjects: [
@@ -13,6 +15,16 @@ Page {
         },
         Settings {
             id: settings
+        },
+        Notification {
+            id: notify
+            type: NotificationType.HubOff
+            
+        },
+        Led {
+            id: led
+            color: LedColor.Red
+            
         }
     ]
     Menu.definition: MenuDefinition {
@@ -76,6 +88,8 @@ Page {
                     text: ""
                     inputMode: TextAreaInputMode.Chat
                     onTextChanged: {
+                        notify.notify()
+                        led.flash()
                         //chatTextBox.editor.cursorPosition = chatTextBox.editor.cursorPosition.valueOf() + 1000
                         scrolldown()
                     }
@@ -110,6 +124,10 @@ Page {
                             timer.start()
                         }
                     }
+                    onTextChanged: {
+                        notify.clearEffectsForAll()
+                        led.cancel()
+                    }
                     clearButtonVisible: false
 
                 }
@@ -135,4 +153,5 @@ Page {
     {
         myScrollView.scrollToPoint(0, 100000, ScrollAnimation.None)   
     }
+    
 }

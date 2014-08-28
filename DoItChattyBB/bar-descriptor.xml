@@ -56,7 +56,7 @@
     <!-- Description, displayed in the BlackBerry 10 application installer.
          May have multiple values for each language. See samples or xsd schema file. Optional. -->
     <description>The DoItChattyBB application</description>
-    <env value="Bright" var="CASCADES_THEME"/>
+    <env value="default" var="CASCADES_THEME"/>
     <!-- Copyright information. Optional. -->
     <!-- <copyright></copyright> -->
     <!--  Name of author which is used for signing. Must match the developer name of your development certificate. -->
@@ -80,6 +80,7 @@
     </asset>
     <!-- Request permission to execute native code.  Required for native applications. -->
     <permission system="true">run_native</permission>
+    <permission>post_notification</permission>
     <env value="/usr/lib/qt4/lib:$LD_LIBRARY_PATH" var="LD_LIBRARY_PATH"/>
     <env value="/usr/lib/qt4/imports:$QML_IMPORT_PATH" var="QML_IMPORT_PATH"/>
     <env value="/usr/lib/qt4/plugins:$QT_PLUGIN_PATH" var="QT_PLUGIN_PATH"/>

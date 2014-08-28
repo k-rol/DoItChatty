@@ -10,8 +10,11 @@
 #include <bb/cascades/controls/button.h>
 #include <bb/cascades/controls/textarea.h>
 #include <bb/cascades/controls/textfield.h>
+#include <bb/platform/Notification>
+
 
 using namespace bb::cascades;
+using namespace bb::platform;
 
 QmlBridge::QmlBridge(QObject *parent) : QObject(parent), myRoot(0), myTextArea(0), mySendTextField(0), myNickTextField(0)
 {
