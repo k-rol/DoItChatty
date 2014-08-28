@@ -4,11 +4,13 @@
 #include <QObject>
 #include <QMap>
 #include <qbimap.h>
+#include "ping.h"
 
 class QTcpSocket;
 class QTcpServer;
 class MainWindow;
 class QBiMap;
+class Ping;
 
 //using namespace QBiMap;
 using namespace std;
@@ -52,6 +54,7 @@ private:
     QMap<QTcpSocket*, QString> connectionMap;
     QBiMap connectionBiMap;
     QList<QString> commandList;
+    Ping ping;
 
 };
 

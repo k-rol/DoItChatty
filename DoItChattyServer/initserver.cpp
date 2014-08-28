@@ -4,19 +4,23 @@
 #include <QDebug>
 #include <mainwindow.h>
 #include <qbimap.h>
+#include "ping.h"
 
 
 /*
  * Constructor that only set the uiMainWindow pointer
 */
 InitServer::InitServer(QObject *parent) :
-    QObject(parent), tcpserver(0), tcpsocket(0), connectionBiMap(this)
+    QObject(parent), tcpserver(0), tcpsocket(0), connectionBiMap(this), ping(this, &connectionBiMap)
 {
     qDebug() << "InitServer Instance Started.";
 
     mainWindow = static_cast<MainWindow*>(this->parent());
 
     makeCommandList();
+    //Ping ping = new Ping(this, &connectionBiMap);
+
+
 }
 
 void InitServer::makeCommandList()
@@ -40,6 +44,7 @@ void InitServer::startServer(int port)
         connect(tcpserver,SIGNAL(newConnection()),this,SLOT(acceptConnection()));
     }
 
+    ping.startPingTimer();
 }
 
 /*
