@@ -1,5 +1,24 @@
 <RCC>
     <qresource prefix="/emoticon">
         <file>smile.png</file>
+        <file>images/beer.png</file>
+        <file>images/bigsmile.png</file>
+        <file>images/dance.png</file>
+        <file>images/facepalm.png</file>
+        <file>images/frown.png</file>
+        <file>images/hug.png</file>
+        <file>images/kiss.png</file>
+        <file>images/laught.png</file>
+        <file>images/lol.png</file>
+        <file>images/love.png</file>
+        <file>images/mad.png</file>
+        <file>images/party.png</file>
+        <file>images/rofl.png</file>
+        <file>images/smile.png</file>
+        <file>images/straight.png</file>
+        <file>images/surprised.png</file>
+        <file>images/tongue.png</file>
+        <file>images/wink.png</file>
+        <file>images/yawn.png</file>
     </qresource>
 </RCC>
