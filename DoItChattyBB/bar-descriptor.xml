@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<?xml version='1.0' encoding='utf-8' standalone='no'?>
 <!--
 
    Copyright (c) 2011-2014 BlackBerry Limited.
@@ -17,85 +17,70 @@
 
 -->
 <qnx xmlns="http://www.qnx.com/schemas/application/1.0">
-
-<!-- BlackBerry 10 application descriptor file.
+    <!-- BlackBerry 10 application descriptor file.
 
     Specifies parameters for identifying, installing, and launching native applications on BlackBerry 10.
 
 -->
-
     <!-- A universally unique application identifier. Must be unique across all BlackBerry 10 applications.
          Using a reverse DNS-style name as the id is recommended. (Eg. com.example.ExampleApplication.) Required. -->
     <id>com.example.DoItChattyBB</id>
     <configuration name="Device-Debug">
-       <platformArchitecture>armle-v7</platformArchitecture>
-       <asset path="arm/o.le-v7-g/DoItChattyBB" entry="true" type="Qnx/Elf">DoItChattyBB</asset>
+        <platformArchitecture>armle-v7</platformArchitecture>
+        <asset entry="true" type="Qnx/Elf" path="arm/o.le-v7-g/DoItChattyBB">DoItChattyBB</asset>
     </configuration>
     <configuration name="Device-Release">
-       <entryPointType>Qnx/Cascades</entryPointType>
-       <platformArchitecture>armle-v7</platformArchitecture>
-       <asset path="arm/o.le-v7/DoItChattyBB.so" entry="true" type="Qnx/Elf">DoItChattyBB.so</asset>
+        <entryPointType>Qnx/Cascades</entryPointType>
+        <platformArchitecture>armle-v7</platformArchitecture>
+        <asset entry="true" type="Qnx/Elf" path="arm/o.le-v7/DoItChattyBB.so">DoItChattyBB.so</asset>
     </configuration>
     <configuration name="Device-Profile">
-       <platformArchitecture>armle-v7</platformArchitecture>
-       <asset path="arm-p/o.le-v7-g/DoItChattyBB" entry="true" type="Qnx/Elf">DoItChattyBB</asset>
+        <platformArchitecture>armle-v7</platformArchitecture>
+        <asset entry="true" type="Qnx/Elf" path="arm-p/o.le-v7-g/DoItChattyBB">DoItChattyBB</asset>
     </configuration>
     <configuration name="Simulator-Debug">
-       <platformArchitecture>x86</platformArchitecture>
-       <asset path="x86/o-g/DoItChattyBB" entry="true" type="Qnx/Elf">DoItChattyBB</asset>
+        <platformArchitecture>x86</platformArchitecture>
+        <asset entry="true" type="Qnx/Elf" path="x86/o-g/DoItChattyBB">DoItChattyBB</asset>
     </configuration>
-
     <!-- The name that is displayed in the BlackBerry 10 application installer.
          May have multiple values for each language. See samples or xsd schema file. Optional. -->
     <name>DoItChattyBB</name>
-
     <!-- A string value of the format <0-999>.<0-999>.<0-999> that represents application version which can be used to check for application upgrade.
          Values can also be 1-part or 2-part. It is not necessary to have a 3-part value.
          An updated version of application must have a versionNumber value higher than the previous version. Required. -->
     <versionNumber>1.0.0</versionNumber>
-
     <!-- Fourth digit segment of the package version. First three segments are taken from the
          <versionNumber> element.  Must be an integer from 0 to 2^16-1 -->
-    <buildId>1</buildId>
-
     <!-- A string value (such as "v1", "2.5", or "Alpha 1") that represents the version of the application, as it should be shown to users. Optional. -->
     <!-- <versionLabel></versionLabel> -->
-
     <!-- Description, displayed in the BlackBerry 10 application installer.
          May have multiple values for each language. See samples or xsd schema file. Optional. -->
     <description>The DoItChattyBB application</description>
-
-
-	<env var="CASCADES_THEME" value="Bright"/>
+    <env value="Bright" var="CASCADES_THEME"/>
     <!-- Copyright information. Optional. -->
     <!-- <copyright></copyright> -->
-
     <!--  Name of author which is used for signing. Must match the developer name of your development certificate. -->
     <author>Example Inc.</author>
-
+    <buildIdFile>buildnum</buildIdFile>
     <!--  Unique author ID assigned by signing authority. Required if using debug tokens. -->
     <!-- <authorId>ABC1234YjsnUk235h</authorId> -->
-
     <initialWindow>
         <autoOrients>true</autoOrients>
         <systemChrome>none</systemChrome>
     </initialWindow>
-
     <!--  The icon for the application, which should be 114x114. -->
     <icon>
         <image>icon.png</image>
     </icon>
-
     <asset path="icon.png">icon.png</asset>
     <asset path="assets">assets</asset>
-
     <!-- Locale support -->
-    <asset path="translations" dest="qm">
+    <asset dest="qm" path="translations">
         <include name="*.qm"/>
     </asset>
-
     <!-- Request permission to execute native code.  Required for native applications. -->
     <permission system="true">run_native</permission>
-    <env var="LD_LIBRARY_PATH" value="app/native/lib:/usr/lib/qt4/lib"/>
-
+    <env value="/usr/lib/qt4/lib:$LD_LIBRARY_PATH" var="LD_LIBRARY_PATH"/>
+    <env value="/usr/lib/qt4/imports:$QML_IMPORT_PATH" var="QML_IMPORT_PATH"/>
+    <env value="/usr/lib/qt4/plugins:$QT_PLUGIN_PATH" var="QT_PLUGIN_PATH"/>
 </qnx>

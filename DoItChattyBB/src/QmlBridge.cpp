@@ -25,6 +25,12 @@ void QmlBridge::setQml(AbstractPane *root)
     myTextArea = myRoot->findChild<TextArea*>("chatTextBox");
     mySendTextField = myRoot->findChild<TextField*>("sendTextBox");
     myNickTextField = myRoot->findChild<TextField*>("nickTextBox");
+
+    nickButton = myRoot->findChild<Button*>("nickButton");
+    connectButton = myRoot->findChild<Button*>("connectButton");
+    sendButton = myRoot->findChild<Button*>("sendButton");
+
+    setDisconnected();
 }
 
 void QmlBridge::updateText(QString readContent)
@@ -56,7 +62,9 @@ void QmlBridge::updateText(QString readContent)
         }
 
     QString text = myTextArea->text() + "\n" + readContent;
+    //QString html = myTextArea->text() + "<html><span style='text-decoration:underline'>Cascades</span>is <span style='font-size:xx-large;font-style:italic;color:green'>awesome!</span></html>";
     myTextArea->setText(text);
+
     //checkFocus();
 }
 
@@ -83,7 +91,8 @@ void QmlBridge::systemMessages(QString textToSend)
     //ui->chatTextbox->append(msgSystem); //signal or qinvokable
 
     TextArea *myTextArea = myRoot->findChild<TextArea*>("chatTextBox");
-    myTextArea->setText(textToSend);
+    QString text = myTextArea->text() + "\n" + textToSend;
+    myTextArea->setText(text);
 }
 
 void QmlBridge::on_sendTextButton_clicked(QString textToSend)
@@ -110,13 +119,9 @@ void QmlBridge::setButtonEnabilities(QString set)
 */
 void QmlBridge::setDisconnected()
 {
-    /*
-    //ui->disconnectButton->setEnabled(false);
-    ui->sendTextButton->setEnabled(false);
-    ui->connectButton->setEnabled(true);
-    ui->portTextBox->setEnabled(true);
-    ui->ipAddressTextBox->setEnabled(true);
-    */
+    nickButton->setEnabled(false);
+    connectButton->setText("Connect");
+    sendButton->setEnabled(false);
 }
 
 /*
@@ -124,13 +129,9 @@ void QmlBridge::setDisconnected()
 */
 void QmlBridge::setConnected()
 {
-    /*
-    ui->disconnectButton->setEnabled(true);
-    ui->sendTextButton->setEnabled(true);
-    ui->connectButton->setEnabled(false);
-    ui->portTextBox->setEnabled(false);
-    ui->ipAddressTextBox->setEnabled(false);
-    */
+    nickButton->setEnabled(true);
+    connectButton->setText("Disconnect");
+    sendButton->setEnabled(true);
 }
 
 void QmlBridge::on_disconnectButton_clicked()
@@ -142,7 +143,7 @@ void QmlBridge::on_connectButton_clicked(QString nickName)
 {
     //timer to put in there in case it doesnt connect*******
     QString ipAddress = "54.191.14.76";
-    int port = 51345;
+    int port = 443;
     tcpServer->nickName = nickName.toStdString();
     tcpServer->connectToHost(ipAddress, port);
 

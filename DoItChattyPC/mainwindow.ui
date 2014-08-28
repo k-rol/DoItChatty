@@ -64,7 +64,7 @@
         <bool>true</bool>
        </property>
        <property name="text">
-        <string>127.0.0.1</string>
+        <string>54.191.14.76</string>
        </property>
       </widget>
      </item>
@@ -74,7 +74,7 @@
         <bool>true</bool>
        </property>
        <property name="text">
-        <string>51345</string>
+        <string>443</string>
        </property>
       </widget>
      </item>

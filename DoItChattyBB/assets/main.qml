@@ -2,19 +2,29 @@ import bb.cascades 1.2
 import my.timer 1.0
 
 Page {
-attachedObjects: [
-    QTimer {
-        id: timer
-        interval: 500
-        onTimeout :{
-            scrolldown()
-            timer.stop()
+    attachedObjects: [
+        QTimer {
+            id: timer
+            interval: 500
+            onTimeout :{
+                scrolldown()
+                timer.stop()
+            }
+        },
+        Settings {
+            id: settings
         }
-    }
-]
+    ]
+    Menu.definition: MenuDefinition {
+            settingsAction: SettingsActionItem {
+                onTriggered: {
+                    settings.open()
+                }
+                }
+        }
       titleBar: TitleBar {
           title: "DoIt Chatty"
-        branded: TriBool.True
+          branded: TriBool.True
     }
     Container {
         Container {
@@ -38,6 +48,7 @@ attachedObjects: [
                 }
                 rightMargin: 20.0
                 preferredWidth: 100
+                objectName: "nickButton"
 
             }
             Button {
@@ -62,13 +73,15 @@ attachedObjects: [
                     scrollMode: TextAreaScrollMode.Stiff
                     objectName: "chatTextBox"
                     editable: false
-                    text: "No text received..."
+                    text: ""
                     inputMode: TextAreaInputMode.Chat
                     onTextChanged: {
                         //chatTextBox.editor.cursorPosition = chatTextBox.editor.cursorPosition.valueOf() + 1000
                         scrolldown()
                     }
                     minHeight: 475.0
+                    textFormat: TextFormat.Plain
+
                 }
             }
             Container {
@@ -97,6 +110,7 @@ attachedObjects: [
                             timer.start()
                         }
                     }
+                    clearButtonVisible: false
 
                 }
                 Button {
@@ -109,6 +123,7 @@ attachedObjects: [
                     }
                     leftMargin: 20.0
                     focusPolicy: FocusPolicy.KeyAndTouch
+                    objectName: "sendButton"
 
                 }
             }

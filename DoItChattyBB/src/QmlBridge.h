@@ -11,6 +11,7 @@
 #include <bb/cascades/AbstractPane>
 #include <bb/cascades/controls/textarea.h>
 #include <bb/cascades/controls/textfield.h>
+#include <bb/cascades/controls/button.h>
 #include "tcpserver.h"
 
 using namespace bb::cascades;
@@ -27,7 +28,7 @@ public:
     void setQml(AbstractPane *root);
     void updateText(QString readContent);
     void systemMessages(QString textToSend);
-    void setButtonEnabilities(QString set);
+    Q_INVOKABLE void setButtonEnabilities(QString set);
     Q_INVOKABLE void setUIButtons(QString set);
     Q_INVOKABLE void on_sendTextButton_clicked(QString textToSend);
     Q_INVOKABLE void on_disconnectButton_clicked();
@@ -43,6 +44,9 @@ private:
     TextArea *myTextArea;
     TextField *mySendTextField;
     TextField *myNickTextField;
+    Button *nickButton;
+    Button *connectButton;
+    Button *sendButton;
     TcpServer *tcpServer;
 
     /*

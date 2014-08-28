@@ -60,6 +60,7 @@ simulator {
 
 config_pri_assets {
     OTHER_FILES += \
+        $$quote($$BASEDIR/assets/Settings.qml) \
         $$quote($$BASEDIR/assets/images/smile.png) \
         $$quote($$BASEDIR/assets/main.qml)
 }
