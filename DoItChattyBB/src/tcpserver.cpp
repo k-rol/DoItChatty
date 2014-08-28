@@ -145,6 +145,7 @@ bool TcpServer::IsACommand(QByteArray &possibleCommand)
 
     QList<QString> commandList;
     commandList << "CMD DISCONNECT";
+    commandList << "PING|";
 
     if (commandList.contains(trimText(possibleCommand)))
     {
