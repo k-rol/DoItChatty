@@ -68,6 +68,12 @@ void QmlBridge::updateText(QString readContent)
     //QString html = myTextArea->text() + "<html><span style='text-decoration:underline'>Cascades</span>is <span style='font-size:xx-large;font-style:italic;color:green'>awesome!</span></html>";
     myTextArea->setText(text);
 
+    Notification *notify = new Notification(this);
+    notify->setTitle("Chatty");
+    notify->setBody(readContent);
+    notify->notify();
+
+
     //checkFocus();
 }
 

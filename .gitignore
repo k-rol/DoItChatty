@@ -1,3 +1,5 @@
+arm/
+x86/
 # C++ objects and libs
 *.slo
 *.lo
@@ -27,8 +29,6 @@ Makefile*
 *.qmlproject.user
 *.qmlproject.user.*
 
-arm/
-x86/
 
 # =========================
 # Operating System Files
@@ -69,3 +69,4 @@ $RECYCLE.BIN/
 *.msi
 *.msm
 *.msp
+DoItChattyBB/arm/o.le-v7-g/DoItChattyBB

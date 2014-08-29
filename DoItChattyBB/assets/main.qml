@@ -18,21 +18,19 @@ Page {
         },
         Notification {
             id: notify
-            type: NotificationType.HubOff
-            
-        },
-        Led {
-            id: led
-            color: LedColor.Red
-            
         }
     ]
     Menu.definition: MenuDefinition {
             settingsAction: SettingsActionItem {
                 onTriggered: {
                     settings.open()
+                    }
                 }
+            actions: ActionItem {
+                onTriggered: {
+                    testpage.open()
                 }
+            }
         }
       titleBar: TitleBar {
           title: "DoIt Chatty"
@@ -88,8 +86,8 @@ Page {
                     text: ""
                     inputMode: TextAreaInputMode.Chat
                     onTextChanged: {
-                        notify.notify()
-                        led.flash()
+                        //notify.notify()
+                        //led.flash()
                         //chatTextBox.editor.cursorPosition = chatTextBox.editor.cursorPosition.valueOf() + 1000
                         scrolldown()
                     }
@@ -125,8 +123,7 @@ Page {
                         }
                     }
                     onTextChanged: {
-                        notify.clearEffectsForAll()
-                        led.cancel()
+
                     }
                     clearButtonVisible: false
 
@@ -144,6 +141,7 @@ Page {
                     objectName: "sendButton"
 
                 }
+
             }
 
         }
@@ -153,5 +151,14 @@ Page {
     {
         myScrollView.scrollToPoint(0, 100000, ScrollAnimation.None)   
     }
+    onCreationCompleted: {
+        Application.fullscreen.connect(onfullscreen)
+    }
     
+    function onfullscreen()
+    {
+        notify.clearEffectsForAll()
+        notify.deleteAllFromInbox()
+    }
 }
+

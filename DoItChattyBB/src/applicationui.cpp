@@ -22,7 +22,7 @@
 #include <bb/cascades/LocaleHandler>
 #include <qtimer.h>
 #include "QmlBridge.h"
-
+#include <bb/platform/NotificationDefaultApplicationSettings>
 
 using namespace bb::cascades;
 
@@ -42,6 +42,13 @@ ApplicationUI::ApplicationUI() :
 
     // initial load
     onSystemLanguageChanged();
+
+    // Set the default notification settings to allow instant previews
+    bb::platform::NotificationDefaultApplicationSettings instantPreview;
+    instantPreview.setPreview(bb::platform::NotificationPriorityPolicy::Allow);
+    instantPreview.apply();
+
+
 
     qmlRegisterType<QTimer>("my.timer", 1, 0, "QTimer");
     // Create scene document from main.qml asset, the parent is set
