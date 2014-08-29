@@ -81,6 +81,7 @@ Page {
                 TextArea {
                     id: chatTextBox
                     scrollMode: TextAreaScrollMode.Stiff
+                    
                     objectName: "chatTextBox"
                     editable: false
                     text: ""
@@ -92,7 +93,7 @@ Page {
                         scrolldown()
                     }
                     minHeight: 475.0
-                    textFormat: TextFormat.Plain
+                    textFormat: TextFormat.Html
 
                 }
             }

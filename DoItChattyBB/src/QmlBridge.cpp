@@ -65,10 +65,15 @@ void QmlBridge::updateText(QString readContent)
         }
 
     QString text = myTextArea->text() + "\n" + readContent;
-    //QString html = myTextArea->text() + "<html><span style='text-decoration:underline'>Cascades</span>is <span style='font-size:xx-large;font-style:italic;color:green'>awesome!</span></html>";
-    myTextArea->setText(text);
+    QString html = "<html><span style='text-decoration:underline'>Cascades</span>is <span style='font-size:xx-large;font-style:italic;color:green'>awesome!</span></html>";
+    //myTextArea->setText(text);
+    //myTextArea->setTextFormat(TextFormat::Html);
+    //myTextArea->editor()->insertPlainText("<html><span style='text-decoration:underline'>Cascades</span>is <span style='font-size:xx-large;font-style:italic;color:green'>awesome!</span></html>");
+    //myTextArea->setTextFormat(TextFormat::Html);
+    myTextArea->editor()->insertPlainText("\n" + readContent);
 
     Notification *notify = new Notification(this);
+    notify->deleteAllFromInbox();
     notify->setTitle("Chatty");
     notify->setBody(readContent);
     notify->notify();
