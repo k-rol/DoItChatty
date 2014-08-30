@@ -56,7 +56,7 @@
     <!-- Description, displayed in the BlackBerry 10 application installer.
          May have multiple values for each language. See samples or xsd schema file. Optional. -->
     <description>The DoItChattyBB application</description>
-    <env value="default" var="CASCADES_THEME"/>
+    <env value="bright" var="CASCADES_THEME"/>
     <!-- Copyright information. Optional. -->
     <!-- <copyright></copyright> -->
     <!--  Name of author which is used for signing. Must match the developer name of your development certificate. -->
