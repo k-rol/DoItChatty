@@ -1,24 +1,50 @@
 <RCC>
     <qresource prefix="/emoticon">
         <file>smile.png</file>
+        <file>images/angel.png</file>
         <file>images/beer.png</file>
-        <file>images/bigsmile.png</file>
-        <file>images/dance.png</file>
-        <file>images/facepalm.png</file>
+        <file>images/biggrin.png</file>
+        <file>images/big-hug.png</file>
+        <file>images/broken-heart.png</file>
+        <file>images/call-me.png</file>
+        <file>images/cant-watch.png</file>
+        <file>images/coffee.png</file>
+        <file>images/confused.png</file>
+        <file>images/cool.png</file>
+        <file>images/crying.png</file>
+        <file>images/dancing.png</file>
+        <file>images/devil.png</file>
+        <file>images/eek.png</file>
+        <file>images/eyelashes.png</file>
         <file>images/frown.png</file>
-        <file>images/hug.png</file>
+        <file>images/gold-star.png</file>
+        <file>images/heart.png</file>
+        <file>images/huh.png</file>
         <file>images/kiss.png</file>
-        <file>images/laught.png</file>
-        <file>images/lol.png</file>
-        <file>images/love.png</file>
+        <file>images/laughing.png</file>
+        <file>images/lips-sealed.png</file>
+        <file>images/love-struck.png</file>
         <file>images/mad.png</file>
+        <file>images/nerd.png</file>
+        <file>images/no.png</file>
+        <file>images/not-interested.png</file>
+        <file>images/on-phone.png</file>
         <file>images/party.png</file>
-        <file>images/rofl.png</file>
+        <file>images/raised-eyebrow.png</file>
+        <file>images/redface.png</file>
+        <file>images/rolleyes.png</file>
+        <file>images/rotfl.png</file>
+        <file>images/sarcastic.png</file>
+        <file>images/sick.png</file>
         <file>images/smile.png</file>
-        <file>images/straight.png</file>
-        <file>images/surprised.png</file>
+        <file>images/straight-face.png</file>
+        <file>images/talk-hand.png</file>
+        <file>images/thinking.png</file>
         <file>images/tongue.png</file>
+        <file>images/waiting.png</file>
+        <file>images/whew.png</file>
         <file>images/wink.png</file>
         <file>images/yawn.png</file>
+        <file>images/yes.png</file>
     </qresource>
 </RCC>
