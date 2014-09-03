@@ -42,6 +42,7 @@ private:
     void updateUserList();
     void makeCommandList();
     void sendTextToAll(QString textToSend);
+    void sendSystemMsgToAll(QString textToSend);
     //invokeMethod methods
     Q_INVOKABLE void textChatMethod(QTcpSocket *client, QString testToSend);
     Q_INVOKABLE void nickChatMethod(QTcpSocket *client, QString nickName);

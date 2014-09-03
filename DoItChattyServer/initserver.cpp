@@ -91,6 +91,7 @@ void InitServer::readIncoming()
     QByteArray readContent = client->readAll();
     qDebug() << readContent;
 
+
     QStringList stringContent = QString(readContent).split("|");
 
     if (commandList.contains(stringContent.first()))
@@ -168,13 +169,27 @@ void InitServer::nickChatMethod(QTcpSocket *client, QString nickName)
 */
 void InitServer::sendTextToAll(QString textToSend)
 {
+    QByteArray byteArrayText = textToSend.toUtf8();
+    QDataStream dataStream(&byteArrayText, QIODevice::WriteOnly);
+    dataStream << quint16(0);
+    dataStream << byteArrayText;
+    dataStream.device()->seek(0);
+    dataStream << (quint16)(byteArrayText.size() - sizeof(quint16));
+
     QList<QTcpSocket*> allclients;
 
     allclients = connectionBiMap.listSocket();
 
     foreach (QTcpSocket *client, allclients) {
-        client->write(textToSend.toStdString().c_str());
+        //client->write(textToSend.toStdString().c_str()); //before dataStream
+        client->write(byteArrayText);
     }
+}
+
+void InitServer::sendSystemMsgToAll(QString textToSend)
+{
+
+
 }
 
 /*
