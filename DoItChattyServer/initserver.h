@@ -43,6 +43,7 @@ private:
     void makeCommandList();
     void sendTextToAll(QString textToSend);
     void sendSystemMsgToAll(QString textToSend);
+    void sendSystemMsgToOne(QString textToSend, QTcpSocket *client);
     //invokeMethod methods
     Q_INVOKABLE void textChatMethod(QTcpSocket *client, QString testToSend);
     Q_INVOKABLE void nickChatMethod(QTcpSocket *client, QString nickName);
@@ -56,6 +57,7 @@ private:
     QBiMap connectionBiMap;
     QList<QString> commandList;
     Ping ping;
+    quint16 packetSize;
 
 };
 

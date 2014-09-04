@@ -40,6 +40,7 @@ private:
     QTcpServer *qTcpServer;
     QTcpSocket *qTcpSocket;
 
+    quint16 packetSize;
     MainWindow *mainWindow;
 
 };

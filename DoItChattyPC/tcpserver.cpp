@@ -14,6 +14,7 @@ using namespace std;
 TcpServer::TcpServer(QObject *parent) : QObject(parent), qTcpServer(0)
 {
     qTcpSocket = 0;
+    packetSize = 0;
     qDebug() << "TcpServer instance created.";
 
     QNetworkProxyFactory::setUseSystemConfiguration(true);
@@ -90,7 +91,24 @@ void TcpServer::connectionSignals()
 void TcpServer::startRead()
 {
 
-    QByteArray readContent = qTcpSocket->readAll();
+    //QByteArray readContent = qTcpSocket->readAll();
+
+
+    QDataStream dataStream(qTcpSocket);
+    if (packetSize == 0)
+    {
+        if (qTcpSocket->bytesAvailable() < (int)sizeof(quint16))
+            return;
+
+        dataStream >> packetSize;
+    }
+
+    if (qTcpSocket->bytesAvailable() < packetSize)
+        return;
+    QByteArray readContent;
+    dataStream >> readContent;
+    packetSize = 0;
+
     qDebug() << readContent;
 
     if (!IsACommand(readContent))
@@ -110,7 +128,17 @@ void TcpServer::sendNickName()
 {
     string nickChangeString = "NICK|" + nickName;
 
-    qTcpSocket->write(nickChangeString.c_str());
+    QString wholeText(nickChangeString.c_str());
+    QByteArray byteArrayText = wholeText.toUtf8();
+    QDataStream dataStream(&byteArrayText, QIODevice::WriteOnly);
+    dataStream << quint16(0);
+    dataStream << byteArrayText;
+    dataStream.device()->seek(0);
+    dataStream << (quint16)(byteArrayText.size() - sizeof(quint16));
+
+    //qTcpSocket->write(wholeText.c_str());
+    qTcpSocket->write(byteArrayText);
+    //qTcpSocket->write(nickChangeString.c_str());
 
 }
 
@@ -185,8 +213,18 @@ void TcpServer::nothingreally()
 void TcpServer::writeSomething(string textToSend)
 {
     //QByteArray byteArray(textToSend.c_str(),textToSend.length());
-    string wholeText = "TEXT|" + textToSend;
-    qTcpSocket->write(wholeText.c_str());
+    string wholeTextstring = "TEXT|" + textToSend;
+    QString wholeText(wholeTextstring.c_str());
+
+    QByteArray byteArrayText = wholeText.toUtf8();
+    QDataStream dataStream(&byteArrayText, QIODevice::WriteOnly);
+    dataStream << quint16(0);
+    dataStream << byteArrayText;
+    dataStream.device()->seek(0);
+    dataStream << (quint16)(byteArrayText.size() - sizeof(quint16));
+
+    //qTcpSocket->write(wholeText.c_str());
+    qTcpSocket->write(byteArrayText);
 }
 
 /*

@@ -14,6 +14,7 @@ InitServer::InitServer(QObject *parent) :
     QObject(parent), tcpserver(0), tcpsocket(0), connectionBiMap(this), ping(this, &connectionBiMap)
 {
     qDebug() << "InitServer Instance Started.";
+    packetSize = 0;
 
     mainWindow = static_cast<MainWindow*>(this->parent());
 
@@ -59,7 +60,8 @@ void InitServer::stopServer(QString message)
         allclients = connectionBiMap.listSocket();
 
         foreach (QTcpSocket *client, allclients) {
-            client->write("Server is shutting down.");
+            //client->write("Server is shutting down.");
+            sendSystemMsgToOne("Server is shutting down.", client);
             client->close();
         }
         //send to UI ("Stopped Listening");
@@ -88,9 +90,40 @@ void InitServer::acceptConnection()
 void InitServer::readIncoming()
 {
     QTcpSocket *client = static_cast<QTcpSocket*>(sender());
-    QByteArray readContent = client->readAll();
-    qDebug() << readContent;
+    //QByteArray readContent = client->readAll();
+    //qDebug() << readContent;
+    qDebug() << "fuck it";
+    QDataStream dataStream(client);
 
+    while(true)
+    {
+        if (packetSize == 0)
+        {
+            if (client->bytesAvailable() < (int)sizeof(quint16))
+                return;
+
+            dataStream >> packetSize;
+            qDebug() << "PacketSize:";
+            qDebug() << packetSize;
+        }
+
+        if (client->bytesAvailable() < packetSize)
+        {
+            qDebug() << "bytesAvailable() < packetSize";
+            return;
+        }
+        QByteArray readContent;
+        quint16 someInt;
+        //QString readContent;
+        dataStream >> someInt;
+        dataStream >> readContent;
+        qDebug() << "readContent:";
+        qDebug() << QString(readContent);
+        cout << QString(readContent).toStdString().c_str();
+        packetSize = 0;
+    }
+
+/*
 
     QStringList stringContent = QString(readContent).split("|");
 
@@ -103,7 +136,7 @@ void InitServer::readIncoming()
         QMetaObject::invokeMethod(this,methodToCall.c_str(),Q_ARG(QTcpSocket*, client),Q_ARG(QString, afterCommand));
     }
 
-
+*/
 
 }
 
@@ -137,7 +170,8 @@ void InitServer::nickChatMethod(QTcpSocket *client, QString nickName)
         }
         else
         {
-            client->write("Username already taken.");
+            //client->write("Username already taken.");
+            sendSystemMsgToOne("Username already taken.", client);
             client->disconnectFromHost();
         }
 
@@ -148,7 +182,8 @@ void InitServer::nickChatMethod(QTcpSocket *client, QString nickName)
         qDebug() << nickName;
         if (connectionBiMap.containsValue(nickName)) //to change to search all values
         {
-            client->write("Username already taken.");
+            //client->write("Username already taken.");
+            sendSystemMsgToOne("Username already taken.", client);
         }
         else
         {
@@ -188,8 +223,33 @@ void InitServer::sendTextToAll(QString textToSend)
 
 void InitServer::sendSystemMsgToAll(QString textToSend)
 {
+    QByteArray byteArrayText = textToSend.toUtf8();
+    QDataStream dataStream(&byteArrayText, QIODevice::WriteOnly);
+    dataStream << quint16(0);
+    dataStream << byteArrayText;
+    dataStream.device()->seek(0);
+    dataStream << (quint16)(byteArrayText.size() - sizeof(quint16));
 
+    QList<QTcpSocket*> allclients;
 
+    allclients = connectionBiMap.listSocket();
+
+    foreach (QTcpSocket *client, allclients) {
+        client->write(byteArrayText);
+    }
+
+}
+
+void InitServer::sendSystemMsgToOne(QString textToSend, QTcpSocket *client)
+{
+    QByteArray byteArrayText = textToSend.toUtf8();
+    QDataStream dataStream(&byteArrayText, QIODevice::WriteOnly);
+    dataStream << quint16(0);
+    dataStream << byteArrayText;
+    dataStream.device()->seek(0);
+    dataStream << (quint16)(byteArrayText.size() - sizeof(quint16));
+
+    client->write(byteArrayText);
 }
 
 /*
