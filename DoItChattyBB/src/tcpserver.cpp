@@ -86,21 +86,28 @@ void TcpServer::startRead()
 {
 
     QDataStream dataStream(qTcpSocket);
+    QString readContent;
 
-    if (packetSize == 0)
+    bool loop = true;
+    while(loop)
     {
-        if (qTcpSocket->bytesAvailable() < (int)sizeof(quint16))
-            return;
+        if (packetSize == 0)
+            {
+                if (qTcpSocket->bytesAvailable() < (int)sizeof(quint16))
+                    return;
 
-        dataStream >> packetSize;
+                dataStream >> packetSize;
+            }
+
+            if (qTcpSocket->bytesAvailable() < packetSize)
+                return;
+
+
+            dataStream >> readContent;
+            packetSize = 0;
+            loop = false;
     }
 
-    if (qTcpSocket->bytesAvailable() < packetSize)
-        return;
-
-    QString readContent;
-    dataStream >> readContent;
-    packetSize = 0;
 
     qDebug() << readContent;
 
