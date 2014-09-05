@@ -23,7 +23,7 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::filterText(QString &readContent)
+void MainWindow::filterText(QString )
 {
     //ui->chatTextbox->insertHtml(textDoc->toHtml());
 }

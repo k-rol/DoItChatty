@@ -90,12 +90,10 @@ void InitServer::acceptConnection()
 void InitServer::readIncoming()
 {
     QTcpSocket *client = static_cast<QTcpSocket*>(sender());
-    //QByteArray readContent = client->readAll();
-    //qDebug() << readContent;
-    qDebug() << "fuck it";
     QDataStream dataStream(client);
-
-    while(true)
+    QString readContent;
+    bool loop = true;
+    while(loop)
     {
         if (packetSize == 0)
         {
@@ -109,21 +107,20 @@ void InitServer::readIncoming()
 
         if (client->bytesAvailable() < packetSize)
         {
-            qDebug() << "bytesAvailable() < packetSize";
+            qDebug() << QString("bytesAvailable %1 < packetSize %2").arg(QString::number(client->bytesAvailable()),QString::number(packetSize));
             return;
         }
-        QByteArray readContent;
-        quint16 someInt;
-        //QString readContent;
-        dataStream >> someInt;
+
+
         dataStream >> readContent;
         qDebug() << "readContent:";
-        qDebug() << QString(readContent);
-        cout << QString(readContent).toStdString().c_str();
+        qDebug() << readContent;
+        qDebug() << readContent.length();
+        loop = false;
         packetSize = 0;
     }
 
-/*
+
 
     QStringList stringContent = QString(readContent).split("|");
 
@@ -136,7 +133,7 @@ void InitServer::readIncoming()
         QMetaObject::invokeMethod(this,methodToCall.c_str(),Q_ARG(QTcpSocket*, client),Q_ARG(QString, afterCommand));
     }
 
-*/
+
 
 }
 
@@ -204,10 +201,11 @@ void InitServer::nickChatMethod(QTcpSocket *client, QString nickName)
 */
 void InitServer::sendTextToAll(QString textToSend)
 {
-    QByteArray byteArrayText = textToSend.toUtf8();
+    QByteArray byteArrayText;
     QDataStream dataStream(&byteArrayText, QIODevice::WriteOnly);
+
     dataStream << quint16(0);
-    dataStream << byteArrayText;
+    dataStream << textToSend;
     dataStream.device()->seek(0);
     dataStream << (quint16)(byteArrayText.size() - sizeof(quint16));
 
@@ -223,10 +221,11 @@ void InitServer::sendTextToAll(QString textToSend)
 
 void InitServer::sendSystemMsgToAll(QString textToSend)
 {
-    QByteArray byteArrayText = textToSend.toUtf8();
+    QByteArray byteArrayText;
     QDataStream dataStream(&byteArrayText, QIODevice::WriteOnly);
+
     dataStream << quint16(0);
-    dataStream << byteArrayText;
+    dataStream << textToSend;
     dataStream.device()->seek(0);
     dataStream << (quint16)(byteArrayText.size() - sizeof(quint16));
 
@@ -242,10 +241,11 @@ void InitServer::sendSystemMsgToAll(QString textToSend)
 
 void InitServer::sendSystemMsgToOne(QString textToSend, QTcpSocket *client)
 {
-    QByteArray byteArrayText = textToSend.toUtf8();
+    QByteArray byteArrayText;
     QDataStream dataStream(&byteArrayText, QIODevice::WriteOnly);
+
     dataStream << quint16(0);
-    dataStream << byteArrayText;
+    dataStream << textToSend;
     dataStream.device()->seek(0);
     dataStream << (quint16)(byteArrayText.size() - sizeof(quint16));
 

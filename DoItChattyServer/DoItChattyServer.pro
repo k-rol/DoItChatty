@@ -10,7 +10,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = DoItChattyServer
 TEMPLATE = app
-CONFIG += console
+
 
 SOURCES += main.cpp\
         mainwindow.cpp \

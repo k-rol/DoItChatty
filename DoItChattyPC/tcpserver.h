@@ -34,8 +34,8 @@ private slots:
 
 private:
     void setUIButtons(QString set);
-    QString trimText(QByteArray &toTrim);
-    bool IsACommand(QByteArray &possibleCommand);
+    QString trimText(QString &toTrim);
+    bool IsACommand(QString &possibleCommand);
     void updateUiText(QString textToSend);
     QTcpServer *qTcpServer;
     QTcpSocket *qTcpSocket;

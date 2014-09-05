@@ -13,6 +13,7 @@ using namespace std;
 TcpServer::TcpServer(QObject *parent) : QObject(parent), qTcpServer(0)
 {
     qTcpSocket = 0;
+    packetSize = 0;
     qDebug() << "TcpServer instance created.";
 }
 
@@ -84,7 +85,23 @@ void TcpServer::connectionSignals()
 void TcpServer::startRead()
 {
 
-    QByteArray readContent = qTcpSocket->readAll();
+    QDataStream dataStream(qTcpSocket);
+
+    if (packetSize == 0)
+    {
+        if (qTcpSocket->bytesAvailable() < (int)sizeof(quint16))
+            return;
+
+        dataStream >> packetSize;
+    }
+
+    if (qTcpSocket->bytesAvailable() < packetSize)
+        return;
+
+    QString readContent;
+    dataStream >> readContent;
+    packetSize = 0;
+
     qDebug() << readContent;
 
     if (!IsACommand(readContent))
@@ -102,9 +119,20 @@ void TcpServer::startRead()
 */
 void TcpServer::sendNickName()
 {
-    string nickChangeString = "NICK|" + nickName;
 
-    qTcpSocket->write(nickChangeString.c_str());
+    QString wholeText("NICK|");
+    wholeText.append(nickName.c_str());
+
+    QByteArray byteArrayText;
+    QDataStream dataStream(&byteArrayText, QIODevice::WriteOnly);
+
+    dataStream << quint16(0);
+    dataStream << wholeText;
+    dataStream.device()->seek(0);
+    dataStream << (quint16)(byteArrayText.size() - sizeof(quint16));
+
+
+    qTcpSocket->write(byteArrayText);
 
 }
 
@@ -121,7 +149,7 @@ void TcpServer::updateUiText(QString textToSend)
  * Trim text received before sending it to the UI
  * Removes all kind of spaces
  */
-QString TcpServer::trimText(QByteArray &toTrim)
+QString TcpServer::trimText(QString &toTrim)
 {
     QString trimmedQString = QString(toTrim);
 
@@ -140,7 +168,7 @@ QString TcpServer::trimText(QByteArray &toTrim)
 /*
  * Bool whether it is a system message or not
  */
-bool TcpServer::IsACommand(QByteArray &possibleCommand)
+bool TcpServer::IsACommand(QString &possibleCommand)
 {
 
     QList<QString> commandList;
@@ -178,9 +206,19 @@ void TcpServer::nothingreally()
  */
 void TcpServer::writeSomething(string textToSend)
 {
-    //QByteArray byteArray(textToSend.c_str(),textToSend.length());
-    string wholeText = "TEXT|" + textToSend;
-    qTcpSocket->write(wholeText.c_str());
+    QString wholeText = "TEXT|";
+    wholeText.append(textToSend.c_str());
+
+    QByteArray byteArrayText;
+    QDataStream dataStream(&byteArrayText, QIODevice::WriteOnly);
+
+    dataStream << quint16(0);
+    dataStream << wholeText;
+    dataStream.device()->seek(0);
+    dataStream << (quint16)(byteArrayText.size() - sizeof(quint16));
+    qDebug() << (quint16)(byteArrayText.size() - sizeof(quint16));
+
+    qTcpSocket->write(byteArrayText);
 }
 
 /*
