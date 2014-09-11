@@ -25,14 +25,24 @@ void Ping::startPingTimer()
 */
 void Ping::pingTimerTimeOut()
 {
+    qDebug() << "!ping timeout!";
+    QString textToSend;
+    textToSend.append("PING|");
+
+    QByteArray byteArrayText;
+    QDataStream dataStream(&byteArrayText, QIODevice::WriteOnly);
+
+    dataStream << quint16(0);
+    dataStream << textToSend;
+    dataStream.device()->seek(0);
+    dataStream << (quint16)(byteArrayText.size() - sizeof(quint16));
+
     QList<QTcpSocket*> allClientsSockets;
 
     allClientsSockets = clientMap->listSocket();
-    //allClientsNickNames = clientMap->listQString();
-    qDebug() << "!ping timeout!";
+
     foreach (QTcpSocket *client, allClientsSockets) {
-        client->write("PING|");
-        qDebug() << "PING|";
+        client->write(byteArrayText);
     }
 }
 

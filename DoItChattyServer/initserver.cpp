@@ -93,7 +93,7 @@ void InitServer::readIncoming()
     QDataStream dataStream(client);
     QString readContent;
     bool loop = true;
-    while(loop)
+    while(client->bytesAvailable())
     {
         if (packetSize == 0)
         {

@@ -95,7 +95,7 @@ void TcpServer::startRead()
     QString readContent;
 
     bool loop = true;
-    while(loop)
+    while(qTcpSocket->bytesAvailable())
     {
         if (packetSize == 0)
         {
