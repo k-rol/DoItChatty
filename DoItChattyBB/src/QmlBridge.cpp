@@ -156,7 +156,7 @@ void QmlBridge::on_disconnectButton_clicked()
 void QmlBridge::on_connectButton_clicked(QString nickName)
 {
     //timer to put in there in case it doesnt connect*******
-    QString ipAddress = "54.191.14.76";
+    QString ipAddress = "54.165.175.80";
     int port = 443;
     tcpServer->nickName = nickName.toStdString();
     tcpServer->connectToHost(ipAddress, port);
